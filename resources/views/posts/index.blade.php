@@ -12,7 +12,7 @@
     @if($posts)
         <div class="text-center">
         @foreach($posts as $post)
-        {{$post->title}}<br>
+        <h3>{{$post->title}}</h3><br>
         {{$post->body}}<br><hr>
         @endforeach
         </div>

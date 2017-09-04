@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Post;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller {
+
+    private $imagePath = "images/";
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +21,7 @@ class PostsController extends Controller {
      */
     public function index($name) {
         $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')
-            ->where('users.name', '=', $name)->get();
+            ->where('users.name', '=', $name)->orderBy('posts.created_at', 'desc')->get();
 
         if(Auth::check() && Auth::user()->name == $name){
             return view('posts.owner', compact('posts'));
@@ -41,11 +45,17 @@ class PostsController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(CreatePostRequest $request) {
         $post = new Post;
         $post->title = $request->title;
         $post->body = $request->body;
         $post->user_id = Auth::user()->id;
+        if($file = $request->file('file')){
+
+            $name = md5($file->getClientOriginalName() . microtime());
+            $file->move($this->imagePath, $name);
+            $post->path = $name;
+        }
         $post->save();
         return $this->index(Auth::user()->name);
     }
