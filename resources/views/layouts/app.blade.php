@@ -42,6 +42,12 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     WeWork!
                 </a>
+
+                @if(Auth::check())
+                    <a class="navbar-brand" href="{{url('/'.Auth::user()->name)}}"><span class="glyphicon glyphicon-home"></span></a>
+                @endif
+
+
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">

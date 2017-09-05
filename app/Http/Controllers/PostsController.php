@@ -35,11 +35,11 @@ class PostsController extends Controller {
         $posts = array();
         $usersWithPost = Post::distinct()->get(['user_id']);
         foreach ($usersWithPost as $user) {
-            $post = Post::where('user_id','=', $user->user_id)->orderBy('created_at', 'desc')->first();
-
+            $post = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')
+                ->where('user_id','=', $user->user_id)->orderBy('posts.created_at', 'desc')->first();
             $posts[] = $post;
         }
-        return view('posts.index', compact('posts'));
+        return view('welcome', compact('posts'));
     }
 
     /**
