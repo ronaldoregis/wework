@@ -5,14 +5,6 @@
 
     <div class="container">
         {!! Form::open(['files'=>true]) !!}
-            <div class="form-group row">
-                <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-                    <div class="col-sm-6 center-block">
-                        {!! Form::label('title', 'Post Title', ['class'=>'col-sm-2 col-form-label control-label']) !!}
-                        {!! Form::text('title', null, ['class'=>'form-control', 'name'=>'title', 'required'=>'required', 'placeholder'=>'Post Title']) !!}
-                    </div>
-                </div>
-            </div>
 
             <div class="form-group row {{ $errors->has('body') ? ' has-error' : '' }}">
                 <div class="col-sm-8 center-block">
@@ -38,7 +30,6 @@
     @if($posts)
         <div class="text-center">
             @foreach($posts as $post)
-                <h3>{{$post->title}}</h3><br>
                 {{$post->body}}<br>
                 <div class="image-container">
                     <img height="100" src="images/{{$post->path}}" alt="">

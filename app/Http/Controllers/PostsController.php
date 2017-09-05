@@ -30,6 +30,18 @@ class PostsController extends Controller {
         }
     }
 
+
+    public function lastPostsFromDistinctUser() {
+        $posts = array();
+        $usersWithPost = Post::distinct()->get(['user_id']);
+        foreach ($usersWithPost as $user) {
+            $post = Post::where('user_id','=', $user->user_id)->orderBy('created_at', 'desc')->first();
+
+            $posts[] = $post;
+        }
+        return view('posts.index', compact('posts'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -47,7 +59,6 @@ class PostsController extends Controller {
      */
     public function store(CreatePostRequest $request) {
         $post = new Post;
-        $post->title = $request->title;
         $post->body = $request->body;
         $post->user_id = Auth::user()->id;
         if($file = $request->file('file')){

@@ -22,7 +22,6 @@ class CreatePostRequest extends Request
      */
     public function rules() {
         return [
-            'title'=>'required|max:140',
             'body'=>'required|max:255'
         ];
     }
